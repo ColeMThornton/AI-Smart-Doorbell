@@ -1,39 +1,71 @@
 import cv2                                          # computer vision library
 from ultralytics import YOLO                        # object detection model library
 import time                                         # used to keep track of time
+import os
+import sys
+from picamera2 import Picamera2
+
 def main():
+
+    ## Set up Variables ##
+    model_path = "rasberry pi file path" # adjust file path as needed
+    confidence_interval = 0.5 
+    last_time = 0
+    FPS = 5         # frame rate limit to improve performance
+    resH = 320      # Resolution height
+    resW = 320      # Resolution width
+
+    # Check if model file exists
+    if (not os.path.exists(model_path)):
+        print("Error: Model path is invalid or model was not found. Verify file name is correct.")
+        sys.exit(0)
+
+    # Load model
     print("Loading YOLO11 Nano (NCNN format)...")
     model = YOLO("yolo11n.pt")                      # Load the YOLO11N model
-    # model.export(format="ncnn")                     # Exports model to NCNN format
-    vid = cv2.VideoCapture(0)                       # Open video stream
-    vid.set(cv2.CAP_PROP_FRAME_WIDTH, 320)          # Lower resolution to speed up processing
-    vid.set(cv2.CAP_PROP_FRAME_HEIGHT, 320)
-    FPS = 5                                         # frame rate limit to improve performance
-    last_time = 0
+    # model.export(format="ncnn")                   # Exports model to NCNN format
+
+
+    ## Video Initialization
+    vid = Picamera2()
+    vid.configure(vid.create_preview_configuration(main={"format": 'BGR888', "size": (resW, resH)}))
+    vid.start()
     print("Starting doorbell stream... Press 'q' to quit.")
+
+
     while True:
-        ret, frame = vid.read()                     # Capture single frame from camera
-        if not ret:                                 # If frame capture fails
-            print("Camera error, retrying...")
-            time.sleep(0.5)
-            continue
-        current_time = time.time()                  # get current time stamp
-        if current_time - last_time >= 1/FPS:       # check if enough time has passed
+        # Capture single frame from camera
+        frame = vid.capture_array()  
+        if (frame is None):
+            print(f"Camera error: Unable to read frames from Picamera. Exiting program.")
+            break
+
+
+        # get current time stamp
+        current_time = time.time()                                  
+    
+        annotated_frame = frame
+        # check if enough time has passed
+
+        if current_time - last_time >= 1/FPS:                      
             last_time = current_time
-            results = model.predict(frame, imgsz=320, conf=0.5, verbose=False)  # conf sets 50% confidence threshold to filter false positives
-            if len(results[0].boxes) > 0:           # check if any objects were detected
-                annotated_frame = results[0].plot() # draw the bounding box and labels on frame
-            else:
-                annotated_frame = frame
-        cv2.imshow("Smart Doorbell - YOLO11n", annotated_frame) # display camera feed with annotations
-        if cv2.waitKey(1) & 0xFF == ord('q'):                   q# force quit program if 'q" is pressed
-            break # exit loop
+            results = model.predict(frame, imgsz=320, conf=confidence_interval, verbose=False) 
+            # check if any objects were detected
+            if len(results[0].boxes) > 0:
+                # draw the bounding box and labels on frame                        
+                annotated_frame = results[0].plot()                 
+                
+        # display camera feed with annotations
+        cv2.imshow("Smart Doorbell - YOLO11n", annotated_frame)
+
+        # force quit program if 'q" is pressed
+        if cv2.waitKey(1) & 0xFF == ord('q'):                     
+            break 
     
     # Clean up resources
-    vid.release()
+    vid.stop()
     cv2.destroyAllWindows()
 
 
-    # test comment
 if __name__ == "__main__":
     main()
