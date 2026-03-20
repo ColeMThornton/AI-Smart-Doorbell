@@ -28,8 +28,12 @@ def main():
         cv2.imshow("Smart Doorbell - YOLO11n", annotated_frame) # display camera feed with annotations
         if cv2.waitKey(1) & 0xFF == ord('q'):                   q# force quit program if 'q" is pressed
             break # exit loop
+    
     # Clean up resources
     vid.release()
     cv2.destroyAllWindows()
+
+
+    # test comment
 if __name__ == "__main__":
     main()
