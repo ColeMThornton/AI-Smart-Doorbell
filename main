@@ -8,12 +8,12 @@ from picamera2 import Picamera2
 def main():
 
     ## Set up Variables ##
-    model_path = "rasberry pi file path" # adjust file path as needed
+    model_path = "/home/cthornt/yolo/yolo11n_ncnn_model" # adjust file path as needed
     confidence_interval = 0.5 
     last_time = 0
-    FPS = 5         # frame rate limit to improve performance
-    resH = 320      # Resolution height
-    resW = 320      # Resolution width
+    FPS = 10         # frame rate limit to improve performance
+    resH = 720      # Resolution height
+    resW = 1280      # Resolution width
 
     # Check if model file exists
     if (not os.path.exists(model_path)):
@@ -28,7 +28,7 @@ def main():
 
     ## Video Initialization
     vid = Picamera2()
-    vid.configure(vid.create_preview_configuration(main={"format": 'BGR888', "size": (resW, resH)}))
+    vid.configure(vid.create_preview_configuration(main={"format": 'RGB888', "size": (resW, resH)}))
     vid.start()
     print("Starting doorbell stream... Press 'q' to quit.")
 
