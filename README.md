@@ -27,14 +27,14 @@ The model used is YOLO11n and the expected format is NCNN. NCNN is used to impro
 5. After training is complete, train.py will automatically retrieve the run with the best weights and begin validation. Metrics are printed displaying accuracy. 
 
 Example File Structure:
-train_split/
+```train_split/
 ├── train/
 │   ├── images/
 │   └── labels/
 └── validation/
     ├── images/
     └── labels/
-
+```
 ## Main
 1. Load the pretrained or trained model
 
