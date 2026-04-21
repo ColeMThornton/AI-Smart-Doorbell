@@ -20,7 +20,20 @@ The model used is YOLO11n and the expected format is NCNN. NCNN is used to impro
 # Setup
 
 ## Training and Evaluation
-1. Generate labeled training and testing data sets. Split the data into the desired ratio (80/20 or 90/10 are good options).
+1. Generate labeled training and testing data sets. Split the data into seperate folders labeled train and validation, as shown in the file structure example below.
+2. In train.py, edit lines 24 thru 26 with the correct file path information. This portion of code generates a YAML file necessary to use the YOLO training libraries.
+3. In train.py, edit line 39 with the file path to the classes.txt file. Update lines 40 and 49 with the correct file path to the data.yaml file.
+4. If file paths are incorrect an error message should display. Otherwise, the YOLO11n model will begin training. Training parameters can be modified on line 49.
+5. After training is complete, train.py will automatically retrieve the run with the best weights and begin validation. Metrics are printed displaying accuracy. 
+
+Example File Structure:
+train_split/
+├── train/
+│   ├── images/
+│   └── labels/
+└── validation/
+    ├── images/
+    └── labels/
 
 ## Main
 1. Load the pretrained or trained model
