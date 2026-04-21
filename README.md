@@ -10,12 +10,19 @@ train.py - Configures, trains, and evaluates the YOLO11n model. Data must be pre
 
 ## Hardware
 Compute: Raspberry Pi 4B
+
 Camera: Arducam IMX708 (or Pi 3 camera equivalent)
 
 ## Model
 
 The model used is YOLO11n and the expected format is NCNN. NCNN is used to improve performance. Running the standard model format will result in unusable framerates on the Pi 4B. 
 
-# File structure 
+# Setup
+
+## Training and Evaluation
+1. Generate labeled training and testing data sets. Split the data into the desired ratio (80/20 or 90/10 are good options).
+
+## Main
+1. Load the pretrained or trained model
 
 
