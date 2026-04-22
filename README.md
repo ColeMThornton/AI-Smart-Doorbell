@@ -36,7 +36,7 @@ Example File Structure:
     └── labels/
 ```
 ## Main
-1. On the Raspberry Pi inside the terminal, install ultralytics NCNN. Plug the camera module into the Pi.
+1. On the Raspberry Pi, inside the terminal, install ultralytics NCNN. Plug the camera module into the Pi.
 2. In the terminal, run "yolo detect predict model=yolo11n.pt". This creates a YOLO folder and downloads a pretrained model.
 3. Export the model to NCNN format by running "yolo export model=yolo11n.pt format=ncnn".
 4. On the Pi, open main.py in Thonny and edit line 11 with the file path to yolo11n_ncnn folder.
