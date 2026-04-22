@@ -36,6 +36,11 @@ Example File Structure:
     └── labels/
 ```
 ## Main
-1. Load the pretrained or trained model
+1. On the Raspberry Pi inside the terminal, install ultralytics NCNN. Plug the camera module into the Pi.
+2. In the terminal, run "yolo detect predict model=yolo11n.pt". This creates a YOLO folder and downloads a pretrained model.
+3. Export the model to NCNN format by running "yolo export model=yolo11n.pt format=ncnn".
+4. On the Pi, open main.py in Thonny and edit line 11 with the file path to yolo11n_ncnn folder.
+5. For the custom trained Amazon package detection model, replace the default yolo11n_ncnn files with the files attached to this repo.
+6. Run the main.py script to activate the Smart Doorbell camera feed and begin inferference. Press "q" to quit. 
 
 
